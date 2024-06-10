@@ -1,6 +1,11 @@
 import { env } from "bun";
 import type { Update } from "../types/schoology";
 
+/**
+ * Post an update to Discord using webhooks.
+ *
+ * @params update
+ */
 export async function postUpdate(update: Update) {
   const embed = {
     title: `${update.author} posted an update`,

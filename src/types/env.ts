@@ -4,9 +4,7 @@ declare module "bun" {
     SCHOOLOGY_PASSWORD: string;
     SCHOOLOGY_LOGIN_URL: string;
     SCHOOLOGY_UPDATES_URL: string;
-
     DISCORD_WEBHOOK_URL: string;
-
     POLLER_INTERVAL: number;
   }
 }

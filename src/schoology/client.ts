@@ -9,6 +9,9 @@ export class Client {
     this.page = page;
   }
 
+  /**
+   * Log in to Schoology.
+   */
   async login() {
     await this.page.goto(env.SCHOOLOGY_LOGIN_URL);
 
@@ -20,6 +23,13 @@ export class Client {
     await this.page.getByText("Log in").click();
   }
 
+  /**
+   * Get updates from Schoology.
+   *
+   * Updates may only include an excerpt of the full body.
+   *
+   * @returns Recent updates from Schoology
+   */
   async getUpdates(): Promise<Update[]> {
     await this.page.goto(env.SCHOOLOGY_UPDATES_URL);
 
