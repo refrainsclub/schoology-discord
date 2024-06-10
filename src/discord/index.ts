@@ -4,7 +4,7 @@ import type { Update } from '../types/schoology';
 /**
  * Post an update to Discord using webhooks.
  *
- * @params update
+ * @params update - The update to post
  */
 export async function postUpdate(update: Update) {
   const embed = {
