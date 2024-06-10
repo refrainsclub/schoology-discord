@@ -11,7 +11,7 @@ We use Playwright for automating browser interactions (such as logging in and ge
 These environment variables must be set up for the program to work.
 
 | Name                    | Description                                        | Required |
-|-------------------------|----------------------------------------------------|----------|
+| ----------------------- | -------------------------------------------------- | -------- |
 | `SCHOOLOGY_EMAIL`       | Schoology email address (or username)              | `true`   |
 | `SCHOOLOGY_PASSWORD`    | Schoology password                                 | `true`   |
 | `SCHOOLOGY_LOGIN_URL`   | Schoology login page                               | `true`   |

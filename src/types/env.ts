@@ -1,4 +1,4 @@
-declare module "bun" {
+declare module 'bun' {
   interface Env {
     SCHOOLOGY_EMAIL: string;
     SCHOOLOGY_PASSWORD: string;

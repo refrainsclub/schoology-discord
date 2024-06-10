@@ -1,4 +1,4 @@
-import { Client } from "./client";
-import { Poller } from "./poller";
+import { Client } from './client';
+import { Poller } from './poller';
 
 export { Client, Poller };

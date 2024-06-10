@@ -1,5 +1,5 @@
-import type { Update } from "../types/schoology";
-import { Client } from "./client";
+import type { Update } from '../types/schoology';
+import { Client } from './client';
 
 export class Poller {
   private client: Client;
