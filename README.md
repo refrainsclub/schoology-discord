@@ -10,14 +10,14 @@ We use Playwright for automating browser interactions (such as logging in and ge
 
 These environment variables must be set up for the program to work.
 
-| Name                  | Description                                        | Required |
-|-----------------------|----------------------------------------------------|----------|
-| SCHOOLOGY_EMAIL       | Schoology email address (or username)              | True     |
-| SCHOOLOGY_PASSWORD    | Schoology password                                 | True     |
-| SCHOOLOGY_LOGIN_URL   | Schoology login page                               | True     |
-| SCHOOLOGY_UPDATES_URL | Schoology updates page                             | True     |
-| DISCORD_WEBHOOK_URL   | Discord webhook URL (find in channel integrations) | True     |
-| POLLER_INTERVAL       | How often to poll Schoology (in milliseconds)      | True     |
+| Name                    | Description                                        | Required |
+|-------------------------|----------------------------------------------------|----------|
+| `SCHOOLOGY_EMAIL`       | Schoology email address (or username)              | `true`   |
+| `SCHOOLOGY_PASSWORD`    | Schoology password                                 | `true`   |
+| `SCHOOLOGY_LOGIN_URL`   | Schoology login page                               | `true`   |
+| `SCHOOLOGY_UPDATES_URL` | Schoology updates page                             | `true`   |
+| `DISCORD_WEBHOOK_URL`   | Discord webhook URL (find in channel integrations) | `true`   |
+| `POLLER_INTERVAL`       | How often to poll Schoology (in milliseconds)      | `true`   |
 
 ## Instructions
 
