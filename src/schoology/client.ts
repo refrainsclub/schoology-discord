@@ -1,60 +1,47 @@
-import crypto from "crypto";
-import OAuth from "oauth-1.0a";
-import type { Update, UpdateRealm } from "./types";
+import { env } from "bun";
+import type { Page } from "playwright";
+import type { Update } from "../types/schoology";
 
 export class Client {
-  private key: string;
-  private secret: string;
-  private baseUrl: string;
-  private oauth: OAuth;
+  private page: Page;
 
-  constructor(key: string, secret: string, baseURL?: string) {
-    this.key = key;
-    this.secret = secret;
-    this.baseUrl = baseURL ? baseURL : "https://api.schoology.com/v1";
-
-    this.oauth = new OAuth({
-      consumer: {
-        key: this.key,
-        secret: this.secret,
-      },
-      signature_method: "HMAC-SHA1",
-      hash_function(base_string, key) {
-        return crypto
-          .createHmac("sha1", key)
-          .update(base_string)
-          .digest("base64");
-      },
-    });
+  constructor(page: Page) {
+    this.page = page;
   }
 
-  async getData(
-    endpoint: string,
-    method: string = "GET",
-    body?: string,
-  ): Promise<any> {
-    const requestData = {
-      url: `${this.baseUrl}${endpoint}`,
-      method,
-      body,
-    };
+  async login() {
+    await this.page.goto(env.SCHOOLOGY_LOGIN_URL);
 
-    const authorization = this.oauth.authorize(requestData);
-    const headers = this.oauth.toHeader(authorization);
+    await this.page
+      .getByPlaceholder("Email or Username")
+      .fill(env.SCHOOLOGY_EMAIL);
+    await this.page.getByPlaceholder("Password").fill(env.SCHOOLOGY_PASSWORD);
 
-    const res = await fetch(requestData.url, {
-      ...requestData,
-      headers: { ...headers },
-    });
-
-    const data = await res.json();
-    return data;
+    await this.page.getByText("Log in").click();
   }
 
-  async getUpdates(realm: UpdateRealm): Promise<Update[]> {
-    const data = (await this.getData(`/${realm}/updates`)) as {
-      update: Update[];
-    };
-    return data.update;
+  async getUpdates(): Promise<Update[]> {
+    await this.page.goto(env.SCHOOLOGY_UPDATES_URL);
+
+    const data = await this.page.$$eval("ul.s-edge-feed > li", (updates) =>
+      updates
+        .map((update) => {
+          const author = update.querySelector('a[title="View user profile."]');
+          const body = update.querySelector(".update-body");
+
+          if (!author || !body) {
+            return null;
+          }
+
+          return {
+            id: update.id.substring(11),
+            author: author.innerText,
+            body: body.innerText,
+          };
+        })
+        .filter((update) => update !== null),
+    );
+
+    return data as Update[];
   }
 }

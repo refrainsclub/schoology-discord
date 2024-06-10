@@ -1,38 +1,20 @@
+import * as playwright from "playwright";
+import { Client, Poller } from "./schoology";
+import { postUpdate } from "./discord";
 import { env } from "bun";
-import * as Schoology from "./schoology/client";
-import * as Discord from "discord.js";
 
-const FIVE_MINUTES = 5 * 60 * 60 * 1000;
+// init playwright
+const browser = await playwright.chromium.launch();
+const page = await browser.newPage();
 
-const {
-  SCHOOLOGY_KEY,
-  SCHOOLOGY_SECRET,
-  SCHOOLOGY_BASE_URL,
-  SCHOOLOGY_UPDATE_REALM,
-  DISCORD_TOKEN,
-} = env;
+// init client
+const client = new Client(page);
+await client.login();
+console.log("Logged in to Schoology");
 
-const schoologyClient = new Schoology.Client(
-  SCHOOLOGY_KEY,
-  SCHOOLOGY_SECRET,
-  SCHOOLOGY_BASE_URL,
-);
-
-const discordClient = new Discord.Client({
-  intents: [Discord.GatewayIntentBits.Guilds],
+// init poller
+const poller = new Poller(client);
+poller.start(env.POLLER_INTERVAL, (updates) => {
+  console.log(`${updates.length} new update(s) found`);
+  updates.forEach(async (update) => await postUpdate(update));
 });
-
-discordClient.once(Discord.Events.ClientReady, (readyClient) => {
-  console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-});
-
-discordClient.login(DISCORD_TOKEN);
-
-async function syncUpdates() {
-  console.log(`Checking for Schoology updates in ${SCHOOLOGY_UPDATE_REALM}...`);
-
-  const updates = await schoologyClient.getUpdates(SCHOOLOGY_UPDATE_REALM);
-  console.log(updates);
-}
-
-setInterval(syncUpdates, FIVE_MINUTES);
